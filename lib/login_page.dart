@@ -45,6 +45,7 @@ class _LoginPageState extends State<LoginPage> {
         final token = responseData['access'];
 
         if (token != null) {
+          print(token);
           // Store the token in SharedPreferences
           final prefs = await SharedPreferences.getInstance();
           await prefs.setString('jwt_token', token);

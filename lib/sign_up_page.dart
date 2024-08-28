@@ -1,3 +1,5 @@
+import 'package:banking_application/constants.dart';
+import 'package:banking_application/login_page.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
@@ -15,24 +17,26 @@ class _SignUpPageState extends State<SignUpPage> {
   final TextEditingController _lastNameController = TextEditingController();
   final TextEditingController _emailController = TextEditingController();
   final TextEditingController _typeController = TextEditingController();
-  final TextEditingController _kycStatus = TextEditingController();
+  // final TextEditingController _kycStatus = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
-  final TextEditingController _confirmPasswordController =
-      TextEditingController();
+
+  bool _kycStatus = false;
 
   Future<void> signUp(BuildContext context) async {
     final dio = Dio();
-    final url = 'http://127.0.0.1:8000/api/register/';
+    final url = '${base_url}/api/user/';
 
     try {
       final response = await dio.post(
         url,
         data: {
-          'firstname': _firstNameController.text,
-          'lastname': _lastNameController.text,
-          'email': _emailController.text,
+          'username': _usernameController.text,
           'password': _passwordController.text,
-          'password2': _confirmPasswordController,
+          'email': _emailController.text,
+          'first_name': _firstNameController.text,
+          'last_name': _lastNameController.text,
+          'user_type': _typeController.text,
+          'kyc_status': _kycStatus
         },
       );
 
@@ -102,6 +106,27 @@ class _SignUpPageState extends State<SignUpPage> {
                         },
                       ),
                       makeInput(
+                        label: "Password",
+                        controller: _passwordController,
+                        obscureText: false,
+                        validator: (value) {
+                          if (value == null || value.isEmpty) {
+                            return 'Please enter a password';
+                          }
+                          return null;
+                        },
+                      ),
+                      makeInput(
+                        label: "Email",
+                        controller: _emailController,
+                        validator: (value) {
+                          if (value == null || value.isEmpty) {
+                            return 'Please enter your email';
+                          }
+                          return null;
+                        },
+                      ),
+                      makeInput(
                         label: "First Name",
                         controller: _firstNameController,
                         validator: (value) {
@@ -122,16 +147,6 @@ class _SignUpPageState extends State<SignUpPage> {
                         },
                       ),
                       makeInput(
-                        label: "Email",
-                        controller: _emailController,
-                        validator: (value) {
-                          if (value == null || value.isEmpty) {
-                            return 'Please enter your email';
-                          }
-                          return null;
-                        },
-                      ),
-                      makeInput(
                         label: "Type",
                         controller: _typeController,
                         validator: (value) {
@@ -141,37 +156,22 @@ class _SignUpPageState extends State<SignUpPage> {
                           return null;
                         },
                       ),
-                      makeInput(
-                        label: "Kyc Status",
-                        controller: _kycStatus,
-                        validator: (value) {
-                          if (value == null || value.isEmpty) {
-                            return 'Please enter your Kyc Status';
-                          }
-                          return null;
-                        },
-                      ),
-                      makeInput(
-                        label: "Password",
-                        controller: _passwordController,
-                        obscureText: false,
-                        validator: (value) {
-                          if (value == null || value.isEmpty) {
-                            return 'Please enter a password';
-                          }
-                          return null;
-                        },
-                      ),
-                      makeInput(
-                        label: "Password2",
-                        controller: _confirmPasswordController,
-                        obscureText: false,
-                        validator: (value) {
-                          if (value == null || value.isEmpty) {
-                            return 'Please enter a password';
-                          }
-                          return null;
-                        },
+                      Row(
+                        children: [
+                          Checkbox(
+                            value: _kycStatus,
+                            onChanged: (bool? value) {
+                              setState(() {
+                                _kycStatus = value ?? false;
+                              });
+                            },
+                          ),
+                          const SizedBox(width: 8),
+                          const Text(
+                            "KYC Status",
+                            style: TextStyle(fontSize: 18),
+                          ),
+                        ],
                       ),
                     ],
                   ),
@@ -193,6 +193,10 @@ class _SignUpPageState extends State<SignUpPage> {
                         if (_formKey.currentState!.validate()) {
                           // Form is valid, perform signup action
                           signUp(context);
+                          Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                  builder: (context) => LoginPage()));
                         }
                       },
                       color: Colors.greenAccent,
