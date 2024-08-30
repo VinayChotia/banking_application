@@ -12,12 +12,13 @@ class TransferMoney extends StatelessWidget {
   TransferMoney({super.key});
   final _formKey = GlobalKey<FormState>();
   final TextEditingController _tagetaccountController = TextEditingController();
-  final TextEditingController _sourceaccountController =
-      TextEditingController();
 
   final TextEditingController _amountController = TextEditingController();
   final token = AuthService.getToken();
-  final accoundId = AuthService.getaccountId();
+  final accountId = AuthService.getaccountId();
+  final TextEditingController _sourceaccountController =
+      TextEditingController();
+
   Future<void> transfer(BuildContext context) async {
     //login user method
     String? tok = await token;
@@ -29,7 +30,7 @@ class TransferMoney extends StatelessWidget {
     final String sourceaccount = _sourceaccountController.text.trim();
     final String targetaccount = _tagetaccountController.text.trim();
     final String amount = _amountController.text.trim();
-
+    String? account_number = await accountId;
     final response = await http.post(
       Uri.parse('${base_url}/api/transfer/${sourceaccount}/'),
       headers: <String, String>{
@@ -45,6 +46,13 @@ class TransferMoney extends StatelessWidget {
 
     if (response.statusCode == 200) {
       print("success");
+      Navigator.pushReplacement(
+        context,
+        MaterialPageRoute(
+          builder: (context) => HomeScreen(
+              token: tok!, accountId: ""), // accountId will be set later
+        ),
+      );
     } else {
       showDialog(
         context: context,

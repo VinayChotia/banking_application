@@ -854,3 +854,105 @@
 //   }
 // }
 
+// class TransferMoney extends StatelessWidget {
+//   TransferMoney({super.key});
+//   final _formKey = GlobalKey<FormState>();
+//   final TextEditingController _tagetaccountController = TextEditingController();
+//   final TextEditingController _sourceaccountController = TextEditingController();
+//   final TextEditingController _amountController = TextEditingController();
+
+//   Future<void> transfer(BuildContext context) async {
+//     final token = await AuthService.getToken();
+//     final accoundId = await AuthService.getaccountId();
+    
+//     // Set the source account text field with the account ID
+//     _sourceaccountController.text = accoundId ?? '';  // Handle null case
+    
+//     final String sourceaccount = _sourceaccountController.text.trim();
+//     final String targetaccount = _tagetaccountController.text.trim();
+//     final String amount = _amountController.text.trim();
+
+//     if (token == null) {
+//       // Handle the case where the token is null
+//       return;
+//     }
+
+//     final response = await http.post(
+//       Uri.parse('${base_url}/api/transfer/$sourceaccount/'),
+//       headers: <String, String>{
+//         'Content-Type': 'application/json; charset=UTF-8',
+//         'Authorization': 'Bearer $token',
+//       },
+//       body: jsonEncode(<String, String>{
+//         'source_account': sourceaccount,
+//         'target_account': targetaccount,
+//         'amount': amount,
+//       }),
+//     );
+
+//     if (response.statusCode == 200) {
+//       print('success');
+//     } else {
+//       showDialog(
+//         context: context,
+//         builder: (BuildContext context) {
+//           return AlertDialog(
+//             title: Text('$token'),
+//             content: Text((response.statusCode).toString()),
+//             actions: [
+//               TextButton(
+//                 onPressed: () {
+//                   Navigator.pop(context);
+//                 },
+//                 child: const Text('OK'),
+//               ),
+//             ],
+//           );
+//         },
+//       );
+//     }
+//   }
+
+//   @override
+//   Widget build(BuildContext context) {
+//     return Scaffold(
+//       resizeToAvoidBottomInset: false,
+//       backgroundColor: Colors.white,
+//       appBar: AppBar(
+//         elevation: 0,
+//         backgroundColor: Colors.white,
+//         leading: IconButton(
+//           onPressed: () {
+//             Navigator.pop(context);
+//           },
+//           icon: const Icon(
+//             Icons.arrow_back_ios,
+//             size: 20,
+//             color: Colors.black,
+//           ),
+//         ),
+//       ),
+//       body: SizedBox(
+//         height: MediaQuery.of(context).size.height,
+//         width: double.infinity,
+//         child: Form(
+//           key: _formKey,
+//           autovalidateMode: AutovalidateMode.onUserInteraction,
+//           child: Column(
+//             mainAxisAlignment: MainAxisAlignment.spaceBetween,
+//             children: <Widget>[
+//               Column(
+//                 mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+//                 children: <Widget>[
+//                   Column(
+//                     children: <Widget>[
+//                       FadeInUp(
+//                         duration: const Duration(milliseconds: 1000),
+//                         child: const Text(
+//                           'Transfer',
+//                           style: TextStyle(
+//                             fontSize: 30,
+//                             fontWeight: FontWeight.bold,
+//                           ),
+//                         ),
+                     

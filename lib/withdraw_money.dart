@@ -1,5 +1,6 @@
 import 'package:animate_do/animate_do.dart';
 import 'package:banking_application/auth_services.dart';
+import 'package:banking_application/balance.dart';
 import 'package:banking_application/constants.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
@@ -18,6 +19,7 @@ class WithdrawMoney extends StatelessWidget {
     //login user method
 
     final String amount = _amountController.text.trim();
+    final token = await AuthService.getToken();
     String? tok = await token;
 
     final response = await http.post(
@@ -30,6 +32,13 @@ class WithdrawMoney extends StatelessWidget {
     );
 
     if (response.statusCode == 200) {
+      Navigator.pushReplacement(
+        context,
+        MaterialPageRoute(
+          builder: (context) => HomeScreen(
+              token: token!, accountId: ""), // accountId will be set later
+        ),
+      );
       print("success");
     } else {
       showDialog(

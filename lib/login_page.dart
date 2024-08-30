@@ -17,7 +17,7 @@ class LoginPage extends StatefulWidget {
 
 class _LoginPageState extends State<LoginPage> {
   final _formKey = GlobalKey<FormState>();
-  final TextEditingController _emailController = TextEditingController();
+  final TextEditingController _usernameController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
   bool _isLoggingIn = false;
 
@@ -27,7 +27,7 @@ class _LoginPageState extends State<LoginPage> {
         _isLoggingIn = true;
       });
 
-      final username = _emailController.text;
+      final username = _usernameController.text;
       final password = _passwordController.text;
 
       final response = await http.post(
@@ -45,7 +45,7 @@ class _LoginPageState extends State<LoginPage> {
         final token = responseData['access'];
 
         if (token != null) {
-          print(token);
+          
           // Store the token in SharedPreferences
           final prefs = await SharedPreferences.getInstance();
           await prefs.setString('jwt_token', token);
@@ -136,7 +136,8 @@ class _LoginPageState extends State<LoginPage> {
                           FadeInUp(
                             duration: const Duration(milliseconds: 1200),
                             child: makeInput(
-                                label: "Email", controller: _emailController),
+                                label: "Username",
+                                controller: _usernameController),
                           ),
                           FadeInUp(
                             duration: const Duration(milliseconds: 1300),
